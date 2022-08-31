@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        function HSVtoRGB(h, s, v) {
+            var r, g, b, i, f, p, q, t;
+            if (arguments.length === 1) {
+                s = h.s, v = h.v, h = h.h;
+            }
+            i = Math.floor(h * 6);
+            f = h * 6 - i;
+            p = v * (1 - s);
+            q = v * (1 - f * s);
+            t = v * (1 - (1 - f) * s);
+            switch (i % 6) {
+                case 0: r = v, g = t, b = p; break;
+                case 1: r = q, g = v, b = p; break;
+                case 2: r = p, g = v, b = t; break;
+                case 3: r = p, g = q, b = v; break;
+                case 4: r = t, g = p, b = v; break;
+                case 5: r = v, g = p, b = q; break;
+            }
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
+            };
+        }
+
+        function init() {
+            function drawRect(posX, posY, step, saturation) {
+                var hue = parseFloat(step) / cnt;
+
+                const clrs = HSVtoRGB(hue, saturation, /*brightness*/0.9);
+
+                context.beginPath();
+                context.fillStyle = '#' + clrs.r.toString(16) + clrs.g.toString(16) + clrs.b.toString(16);
+                context.fillRect(posX, posY, 300, 40);
+                context.fillStyle = "#262626";
+                context.fillText(hue.toString(), posX + 10, posY + 20);
+                context.closePath();
+            }
+
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+
+            const sat = [0.8, 0.5, 0.3, 0.2];
+            const cnt = 20;
+
+            for (let n = 0; n < 4; n++)
+                for (let x = 0; x < cnt; x++)
+                    drawRect(30 + (300 * n), 30 + (x * 40), (x + 1), sat[n]);
+        }
+    </script>
+</head>
+    <body onload="init()">
+        <div id="canvas-container" style="text-align: center; width: 100%">
+            <canvas id="canvas" width="1260" height="860" style="display: inline;border:1px solid #000000;"></canvas>
+        </div>
+    </body>
+</html>

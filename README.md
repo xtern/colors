@@ -1,1 +1,1 @@
-# colors
+# ANSI colors logging palette
